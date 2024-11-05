@@ -1,3 +1,4 @@
 # Ignore VSCode Workspace
-.code-workspace
+*.code-workspace
 GamewormAPI.code-workspace
+*.exe
