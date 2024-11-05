@@ -1,3 +1,3 @@
-module github.com/TimopheyKor/bookworm_api
+module github.com/TimopheyKor/GamewormAPI
 
 go 1.23.2
