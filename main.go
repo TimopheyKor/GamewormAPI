@@ -128,8 +128,7 @@ func main() {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
 
-	// Prints the names and majors of students in a sample spreadsheet:
-	// https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
+	// Read the test spreadsheet that was found:
 	readRange := "Test Sheet!A1:C"
 	resp, err := sSrvc.Spreadsheets.Values.Get(fileId, readRange).Do()
 	if err != nil {
