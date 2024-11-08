@@ -11,6 +11,7 @@ import (
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
 )
@@ -87,13 +88,38 @@ func main() {
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets.readonly")
+	config, err := google.ConfigFromJSON(b, sheets.SpreadsheetsReadonlyScope, drive.DriveMetadataReadonlyScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
 	client := getClient(config)
 
-	srv, err := sheets.NewService(ctx, option.WithHTTPClient(client))
+	// Creating a Google Drive service from the client:
+	dSrvc, err := drive.NewService(ctx, option.WithHTTPClient(client))
+	if err != nil {
+		log.Fatalf("new drive: %s", err)
+	}
+
+	// Read the files from Drive:
+	rawRes, err := dSrvc.Files.List().Context(ctx).PageSize(10).Fields("nextPageToken, files(id, name)").Do()
+	if err != nil {
+		log.Fatalf("do file list call: %s", err)
+	}
+
+	// DEBUG PRINT: File pull response
+	fmt.Printf("%+v\n", rawRes)
+
+	// Search for the Google Sheet we want:
+	searchfile := "LocalAPITestSheet"
+	res, err := dSrvc.Files.List().
+		Q("name=\"" + searchfile + "\" and trashed=false").
+		Fields("files(id,parents)").Do() // "trashed=false" doesn't search in the trash box.
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+
+	// Create a Google Sheets Service from the Client:
+	sSrvc, err := sheets.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
@@ -102,7 +128,7 @@ func main() {
 	// https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
 	spreadsheetId := "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
 	readRange := "Class Data!A2:E"
-	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	resp, err := sSrvc.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
 	if err != nil {
 		log.Fatalf("Unable to retrieve data from sheet: %v", err)
 	}
@@ -110,10 +136,10 @@ func main() {
 	if len(resp.Values) == 0 {
 		fmt.Println("No data found.")
 	} else {
-		fmt.Println("Name, Major:")
-		for _, row := range resp.Values {
-			// Print columns A and E, which correspond to indices 0 and 4.
-			fmt.Printf("%s, %s\n", row[0], row[4])
-		}
+		fmt.Println("Example sheet data found.")
+		// for _, row := range resp.Values {
+		// 	// Print columns A and E, which correspond to indices 0 and 4.
+		// 	fmt.Printf("%s, %s\n", row[0], row[4])
+		// }
 	}
 }
