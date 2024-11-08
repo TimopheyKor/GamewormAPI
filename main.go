@@ -88,7 +88,7 @@ func main() {
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, sheets.SpreadsheetsReadonlyScope, drive.DriveMetadataReadonlyScope)
+	config, err := google.ConfigFromJSON(b, sheets.SpreadsheetsReadonlyScope, drive.DriveScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
@@ -101,13 +101,10 @@ func main() {
 	}
 
 	// Read the files from Drive:
-	rawRes, err := dSrvc.Files.List().Context(ctx).PageSize(10).Fields("nextPageToken, files(id, name)").Do()
-	if err != nil {
-		log.Fatalf("do file list call: %s", err)
-	}
-
-	// DEBUG PRINT: File pull response
-	fmt.Printf("%+v\n", rawRes)
+	// rawRes, err := dSrvc.Files.List().PageSize(10).Fields("nextPageToken, files(id, name)").Do()
+	// if err != nil {
+	// 	log.Fatalf("Initial Do() file list call: %s", err)
+	// }
 
 	// Search for the Google Sheet we want:
 	searchfile := "LocalAPITestSheet"
@@ -115,8 +112,18 @@ func main() {
 		Q("name=\"" + searchfile + "\" and trashed=false").
 		Fields("files(id,parents)").Do() // "trashed=false" doesn't search in the trash box.
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Fatalf("Q.Fields.Do() call error: %v", err)
 	}
+	// DEBUG PRINT: File pull response
+	fmt.Printf("%+v\n", res.Files[0])
+
+	fileId := res.Files[0].Id
+	// Download file content
+	file, err := dSrvc.Files.Get(fileId).Do()
+	if err != nil {
+		log.Fatalf("Error getting file: %v", err)
+	}
+	fmt.Println("File Name:", file.Name)
 
 	// Create a Google Sheets Service from the Client:
 	sSrvc, err := sheets.NewService(ctx, option.WithHTTPClient(client))
@@ -126,9 +133,8 @@ func main() {
 
 	// Prints the names and majors of students in a sample spreadsheet:
 	// https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-	spreadsheetId := "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-	readRange := "Class Data!A2:E"
-	resp, err := sSrvc.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	readRange := "Test Sheet!A1:C"
+	resp, err := sSrvc.Spreadsheets.Values.Get(fileId, readRange).Do()
 	if err != nil {
 		log.Fatalf("Unable to retrieve data from sheet: %v", err)
 	}
