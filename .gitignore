@@ -2,3 +2,6 @@
 *.code-workspace
 GamewormAPI.code-workspace
 *.exe
+# Ignore Google API Project Auth Client Secret and generated tokens
+credentials.json
+token.json
