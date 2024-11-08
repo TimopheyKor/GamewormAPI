@@ -88,7 +88,7 @@ func main() {
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, sheets.SpreadsheetsReadonlyScope, drive.DriveScope)
+	config, err := google.ConfigFromJSON(b, sheets.SpreadsheetsReadonlyScope, sheets.DriveFileScope, drive.DriveReadonlyScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
@@ -100,30 +100,27 @@ func main() {
 		log.Fatalf("new drive: %s", err)
 	}
 
-	// Read the files from Drive:
-	// rawRes, err := dSrvc.Files.List().PageSize(10).Fields("nextPageToken, files(id, name)").Do()
-	// if err != nil {
-	// 	log.Fatalf("Initial Do() file list call: %s", err)
-	// }
-
 	// Search for the Google Sheet we want:
+	// TODO: Make searchfile a constant string in a config file somewhere.
 	searchfile := "LocalAPITestSheet"
 	res, err := dSrvc.Files.List().
 		Q("name=\"" + searchfile + "\" and trashed=false").
-		Fields("files(id,parents)").Do() // "trashed=false" doesn't search in the trash box.
+		Fields("files(id,parents)").Do()
 	if err != nil {
 		log.Fatalf("Q.Fields.Do() call error: %v", err)
 	}
-	// DEBUG PRINT: File pull response
-	fmt.Printf("%+v\n", res.Files[0])
+	if len(res.Files) > 1 {
+		log.Fatalf("Multiple matching filenames found, please delete"+
+			"or rename incorrect files named: %v", searchfile)
+	}
 
+	// Download file content:
 	fileId := res.Files[0].Id
-	// Download file content
 	file, err := dSrvc.Files.Get(fileId).Do()
 	if err != nil {
-		log.Fatalf("Error getting file: %v", err)
+		log.Fatalf("Unable to download file on Do() call: %v", err)
 	}
-	fmt.Println("File Name:", file.Name)
+	fmt.Println("File Name Found:", file.Name)
 
 	// Create a Google Sheets Service from the Client:
 	sSrvc, err := sheets.NewService(ctx, option.WithHTTPClient(client))
