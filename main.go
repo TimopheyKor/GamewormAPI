@@ -47,6 +47,9 @@ func main() {
 		log.Fatalf("getExistingSheetId error: %v", err)
 	}
 
+	// TODO: If sheetId is an empty string, create a new sheet,
+	// and save it's Id to SheetId instead.
+
 	// Read the test spreadsheet that was found:
 	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, readRange).Do()
 	if err != nil {
