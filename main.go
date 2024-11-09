@@ -48,7 +48,11 @@ func main() {
 	}
 
 	// TODO: If sheetId is an empty string, create a new sheet,
-	// and save it's Id to SheetId instead.
+	// and save it's Id to SheetId instead.\
+	//
+	if sheetId == "" {
+		sheetId, err = newSpreadsheet(sSrvc, searchSheetName)
+	}
 
 	// Read the test spreadsheet that was found:
 	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, readRange).Do()
