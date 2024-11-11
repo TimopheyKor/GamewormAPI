@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -43,9 +44,20 @@ func main() {
 
 	// Search for the Google Sheet we want:
 	sheetId, err := getExistingSheetId(dSrvc, dbSpreadsheetName)
-	if err != nil {
-		log.Fatalf("getExistingSheetId error: %v", err)
+	if err != nil && !errors.Is(err, ErrNoMatchesFound) {
+		log.Fatalf("get existing sheet id: %s", err)
+	} else if errors.Is(err, ErrNoMatchesFound) {
+		// create new sheet here
+		// sheetId, err = newSheet()
 	}
+
+	// if sheetId == "" {
+	// 	log.Fatal("blah")
+	// }
+
+	// if err != nil {
+	// log.Fatalf("getExistingSheetId error: %v", err)
+	// }
 
 	// TODO: If sheetId is an empty string, create a new sheet,
 	// and save it's Id to SheetId instead.

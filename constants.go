@@ -23,4 +23,5 @@ const (
 // Define global errors:
 var (
 	ErrTooManyMatches = errors.New("too many matches found")
+	ErrNoMatchesFound = errors.New("no matches found")
 )
