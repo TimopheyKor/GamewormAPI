@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"google.golang.org/api/drive/v3"
 )
 
@@ -14,10 +16,10 @@ func getExistingSheetId(srv *drive.Service, name string) (string, error) {
 
 	// Handle errors & unexpected results:
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("query files list for %s: %w", name, err)
 	}
 	if len(res.Files) > 1 {
-		return "", ErrTooManyMatchingSheets
+		return "", fmt.Errorf("%s: %w", name, ErrTooManyMatches)
 	}
 	return res.Files[0].Id, nil
 }

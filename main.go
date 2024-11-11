@@ -42,7 +42,7 @@ func main() {
 	}
 
 	// Search for the Google Sheet we want:
-	sheetId, err := getExistingSheetId(dSrvc, searchSheetName)
+	sheetId, err := getExistingSheetId(dSrvc, dbSpreadsheetName)
 	if err != nil {
 		log.Fatalf("getExistingSheetId error: %v", err)
 	}

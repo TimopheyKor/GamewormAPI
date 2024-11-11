@@ -1,21 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 )
 
 // Define global constants:
+// TODO: Rename unexported constants to prefix with _
 const (
-	// Google Sheet Name to search for in user's Google Drive:
-	searchSheetName = "LocalAPITestSheet"
-	readRange       = "Test Sheet!A1:C"
+	// Google Sheet Temp Schema:
+	dbSpreadsheetName = "GamewormDataDoNotEdit"
+	readRange         = "Test Sheet!A1:C"
+	gameD             = "Games"
+	gameRange         = "A1:E"
+	reviewD           = "Reviews"
+	reviewRange       = "A1:C"
+	backlogD          = "Backlog"
+	backlogRange      = "A1:E"
 	// TODO: Move this path to a more secure location when hosting.
 	clientConfigPath = "C:/data/temp_credentials/credentials.json"
 )
 
 // Define global errors:
 var (
-	ErrTooManyMatchingSheets = fmt.Errorf(
-		"multiple files found matching sheet query for filename %v",
-		searchSheetName)
+	ErrTooManyMatches = errors.New("too many matches found")
 )
