@@ -42,77 +42,49 @@ func main() {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
 
-	// Search for the Google Sheet we want:
+	// Search for the database sheet. If the sheet isn't found, return
+	// the appropriate error, or create the databse sheet.
 	sheetId, err := getExistingSheetId(dSrvc, dbSpreadsheetName)
 	if err != nil && !errors.Is(err, ErrNoMatchesFound) {
 		log.Fatalf("get existing sheet id: %s", err)
 	} else if errors.Is(err, ErrNoMatchesFound) {
-		// create new sheet here
-		// sheetId, err = newSheet()
-	}
-
-	// if sheetId == "" {
-	// 	log.Fatal("blah")
-	// }
-
-	// if err != nil {
-	// log.Fatalf("getExistingSheetId error: %v", err)
-	// }
-
-	// TODO: If sheetId is an empty string, create a new sheet,
-	// and save it's Id to SheetId instead.
-	if sheetId == "" {
-		log.Fatal("Spreadsheet not found, creating new sheet not implemeneted")
-		//sheetId, err = newSpreadsheet(sSrvc, searchSheetName)
-	}
-
-	// Read the test spreadsheet that was found:
-	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, readRange).Do()
-	if err != nil {
-		log.Fatalf("Unable to retrieve data from sheet: %v", err)
-	}
-
-	if len(resp.Values) == 0 {
-		fmt.Println("No data found.")
+		fmt.Printf("%s, creating new sheet for db\n", err)
+		sheetId, err = newSheetDB(ctx, sSrvc)
+		if err != nil {
+			log.Fatalf("failed to create new sheet db: %v", err)
+		}
 	} else {
-		fmt.Println("Example sheet data found.")
-		// for _, row := range resp.Values {
-		// 	// Print columns A and E, which correspond to indices 0 and 4.
-		// 	fmt.Printf("%s, %s\n", row[0], row[4])
-		// }
+		fmt.Printf("existing sheet found: %s\n", dbSpreadsheetName)
 	}
 
-	// Testing creating a new spreadsheet:
-	fmt.Println("Testing new spreadsheet creation...")
-	newSheet, err := sSrvc.Spreadsheets.Create(&sheets.Spreadsheet{
-		Properties: &sheets.SpreadsheetProperties{
-			Title: "APIGeneratedTestSheet",
-		},
-		Sheets: []*sheets.Sheet{
+	// Read the first sheet of the sheetDB:
+	// resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, gameD+"!"+gameRange).Do()
+	// if err != nil {
+	// 	log.Fatalf("Unable to retrieve data from sheet: %v", err)
+	// }
+
+	// if len(resp.Values) == 0 {
+	// 	fmt.Println("No data found.")
+	// } else {
+	// 	fmt.Println("Example sheet data found.")
+	// 	// for _, row := range resp.Values {
+	// 	// 	// Print columns A and E, which correspond to indices 0 and 4.
+	// 	// 	fmt.Printf("%s, %s\n", row[0], row[4])
+	// 	// }
+	// }
+
+	// Testing update call:
+	res, err := sSrvc.Spreadsheets.Values.Update(sheetId, gameD+"!A1:E1", &sheets.ValueRange{
+		MajorDimension: "ROWS",
+		Values: [][]any{
 			{
-				Properties: &sheets.SheetProperties{
-					Title: "Backlog",
-				},
-			},
-			{
-				Properties: &sheets.SheetProperties{
-					Title: "Wishlist",
-				},
-			},
-			{
-				Properties: &sheets.SheetProperties{
-					Title: "Games",
-				},
+				"Unique Game ID", "Game Title", "Game Image", "Game Developer",
+				"Game Publisher",
 			},
 		},
 	}).Context(ctx).Do()
 	if err != nil {
-		log.Fatalf("Unable to generate spreadsheet: %v", err)
+		log.Fatalf("failed to update values: %v\n", err)
 	}
-
-	newSheetId := newSheet.SpreadsheetId
-	fmt.Printf("Generated Spreadsheet ID: %v\n", newSheetId)
-	for _, sheet := range newSheet.Sheets {
-		fmt.Printf("Found Sheet: %v\n", sheet.Properties.Title)
-	}
+	fmt.Printf("update successful: %+v", res)
 }
