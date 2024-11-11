@@ -75,6 +75,18 @@ func main() {
 		Properties: &sheets.SpreadsheetProperties{
 			Title: "APIGeneratedTestSheet",
 		},
+		Sheets: []*sheets.Sheet{
+			&sheets.Sheet{
+				Properties: &sheets.SheetProperties{
+					Title: "Backlog",
+				},
+			},
+			&sheets.Sheet{
+				Properties: &sheets.SheetProperties{
+					Title: "Wishlist",
+				},
+			},
+		},
 	}).Context(ctx).Do()
 	if err != nil {
 		log.Fatalf("Unable to generate spreadsheet: %v", err)
@@ -82,9 +94,7 @@ func main() {
 
 	newSheetId := newSheet.SpreadsheetId
 	fmt.Printf("Generated Spreadsheet ID: %v\n", newSheetId)
-	resp, err = sSrvc.Spreadsheets.Values.Get(newSheetId, "Sheet1!A1:C").Do()
-	if err != nil {
-		log.Fatalf("Unable to read spreadsheet: %v", err)
+	for _, sheet := range newSheet.Sheets {
+		fmt.Printf("Found Sheet: %v\n", sheet.Properties.Title)
 	}
-	fmt.Printf("Found Sheet Values: %+v\n", resp.Values)
 }
