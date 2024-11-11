@@ -21,6 +21,9 @@ func getExistingSheetId(srv *drive.Service, name string) (string, error) {
 	if len(res.Files) > 1 {
 		return "", fmt.Errorf("%s: %w", name, ErrTooManyMatches)
 	}
+	if len(res.Files) == 0 {
+		return "", nil
+	}
 	return res.Files[0].Id, nil
 }
 

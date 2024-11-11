@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := getClient(config)
+	client := getClient(ctx, config)
 
 	// Creating a Google Drive service from the client:
 	dSrvc, err := drive.NewService(ctx, option.WithHTTPClient(client))
@@ -50,6 +50,7 @@ func main() {
 	// TODO: If sheetId is an empty string, create a new sheet,
 	// and save it's Id to SheetId instead.
 	if sheetId == "" {
+		log.Fatal("Spreadsheet not found, creating new sheet not implemeneted")
 		//sheetId, err = newSpreadsheet(sSrvc, searchSheetName)
 	}
 
