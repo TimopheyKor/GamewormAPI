@@ -76,14 +76,19 @@ func main() {
 			Title: "APIGeneratedTestSheet",
 		},
 		Sheets: []*sheets.Sheet{
-			&sheets.Sheet{
+			{
 				Properties: &sheets.SheetProperties{
 					Title: "Backlog",
 				},
 			},
-			&sheets.Sheet{
+			{
 				Properties: &sheets.SheetProperties{
 					Title: "Wishlist",
+				},
+			},
+			{
+				Properties: &sheets.SheetProperties{
+					Title: "Games",
 				},
 			},
 		},
