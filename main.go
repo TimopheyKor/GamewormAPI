@@ -48,10 +48,9 @@ func main() {
 	}
 
 	// TODO: If sheetId is an empty string, create a new sheet,
-	// and save it's Id to SheetId instead.\
-	//
+	// and save it's Id to SheetId instead.
 	if sheetId == "" {
-		sheetId, err = newSpreadsheet(sSrvc, searchSheetName)
+		//sheetId, err = newSpreadsheet(sSrvc, searchSheetName)
 	}
 
 	// Read the test spreadsheet that was found:
@@ -69,4 +68,23 @@ func main() {
 		// 	fmt.Printf("%s, %s\n", row[0], row[4])
 		// }
 	}
+
+	// Testing creating a new spreadsheet:
+	fmt.Println("Testing new spreadsheet creation...")
+	newSheet, err := sSrvc.Spreadsheets.Create(&sheets.Spreadsheet{
+		Properties: &sheets.SpreadsheetProperties{
+			Title: "APIGeneratedTestSheet",
+		},
+	}).Context(ctx).Do()
+	if err != nil {
+		log.Fatalf("Unable to generate spreadsheet: %v", err)
+	}
+
+	newSheetId := newSheet.SpreadsheetId
+	fmt.Printf("Generated Spreadsheet ID: %v\n", newSheetId)
+	resp, err = sSrvc.Spreadsheets.Values.Get(newSheetId, "Sheet1!A1:C").Do()
+	if err != nil {
+		log.Fatalf("Unable to read spreadsheet: %v", err)
+	}
+	fmt.Printf("Found Sheet Values: %+v\n", resp.Values)
 }
