@@ -39,3 +39,17 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	}
 	return spreadsheet.SpreadsheetId, nil
 }
+
+func prepUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, [][]any) (string, error) {
+	return func(s string, a [][]any) (string, error) {
+		return srv.Spreadsheets
+	}
+}
+
+func updateRowCells(sRange string, values [][]any) (string, error) {
+	res, err := srv.Spreadsheets
+}
+
+updateFn := prepSheetsCall(ctx, srv, id)
+s, err := updateFn(range, vals)
+s, err := updateFn(range2, vals2)

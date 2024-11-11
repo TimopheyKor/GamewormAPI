@@ -82,7 +82,7 @@ func main() {
 				"Game Publisher",
 			},
 		},
-	}).Context(ctx).Do()
+	}).ValueInputOption("RAW").Context(ctx).Do()
 	if err != nil {
 		log.Fatalf("failed to update values: %v\n", err)
 	}
