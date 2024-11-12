@@ -7,6 +7,7 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
+// TODO: Think of a name that doesn't include Worker.
 type SheetWorker struct {
 	Ctx     context.Context
 	Srv     *sheets.Service
@@ -41,3 +42,29 @@ func (w *SheetWorker) GameIdExists(gameId, table string) (bool, error) {
 	}
 	return false, nil
 }
+
+// TODO: Implement AddNewGame so that it replaces the Append functionality.
+// This function should specifically be for adding a game to the first sheet -
+// adding games to the Reviews section or Backlog should stem from an existing
+// game in the first sheet.
+func (w *SheetWorker) AddNewGame(range_ string, values []any) (string, error) {
+	return "", nil
+}
+
+// return func(sheetName string, values []any) (string, error) {
+// 	inputLen := len(values)
+// 	switch {
+// 	case inputLen > 5:
+// 		return "", static.ErrInputOutOfRange
+// 	case inputLen == 0:
+// 		return "", static.ErrInputEmpty
+// 	}
+// 	res, err := srv.Spreadsheets.Values.Append(sheetId, sheetName, &sheets.ValueRange{
+// 		MajorDimension: "ROWS",
+// 		Values:         append([][]any{}, values),
+// 	}).ValueInputOption("RAW").Context(ctx).Do()
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return fmt.Sprintf("append response: %+v\n", res), err
+// }
