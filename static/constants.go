@@ -21,6 +21,16 @@ const (
 	ClientConfigPath = "C:/data/temp_credentials/credentials.json"
 )
 
+// Define columns as enum constants:
+// Game table:
+const (
+	GamePK = iota
+	GTitle
+	GImage
+	GDev
+	GPub
+)
+
 // Define column names:
 // TODO: Replace Schema vars with a Schema file
 var (
