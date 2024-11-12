@@ -58,33 +58,33 @@ func main() {
 	}
 
 	// Read the first sheet of the sheetDB:
-	// resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, gameD+"!"+gameRange).Do()
-	// if err != nil {
-	// 	log.Fatalf("Unable to retrieve data from sheet: %v", err)
-	// }
+	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, gameD+"!"+gameRange).Do()
+	if err != nil {
+		log.Fatalf("Unable to retrieve data from sheet: %v", err)
+	}
 
-	// if len(resp.Values) == 0 {
-	// 	fmt.Println("No data found.")
-	// } else {
-	// 	fmt.Println("Example sheet data found.")
-	// 	// for _, row := range resp.Values {
-	// 	// 	// Print columns A and E, which correspond to indices 0 and 4.
-	// 	// 	fmt.Printf("%s, %s\n", row[0], row[4])
-	// 	// }
-	// }
+	if len(resp.Values) == 0 {
+		fmt.Println("No data found.")
+	} else {
+		fmt.Println("Example sheet data found.")
+		// for _, row := range resp.Values {
+		// 	// Print columns A and E, which correspond to indices 0 and 4.
+		// 	fmt.Printf("%s, %s\n", row[0], row[4])
+		// }
+	}
 
 	// Testing update call:
-	res, err := sSrvc.Spreadsheets.Values.Update(sheetId, gameD+"!A1:E1", &sheets.ValueRange{
-		MajorDimension: "ROWS",
-		Values: [][]any{
-			{
-				"Unique Game ID", "Game Title", "Game Image", "Game Developer",
-				"Game Publisher",
-			},
-		},
-	}).ValueInputOption("RAW").Context(ctx).Do()
-	if err != nil {
-		log.Fatalf("failed to update values: %v\n", err)
-	}
-	fmt.Printf("update successful: %+v", res)
+	// res, err := sSrvc.Spreadsheets.Values.Update(sheetId, gameD+"!A1:E1", &sheets.ValueRange{
+	// 	MajorDimension: "ROWS",
+	// 	Values: [][]any{
+	// 		{
+	// 			"Unique Game ID", "Game Title", "Game Image", "Game Developer",
+	// 			"Game Publisher",
+	// 		},
+	// 	},
+	// }).ValueInputOption("RAW").Context(ctx).Do()
+	// if err != nil {
+	// 	log.Fatalf("failed to update values: %v\n", err)
+	// }
+	// fmt.Printf("update successful: %+v", res)
 }
