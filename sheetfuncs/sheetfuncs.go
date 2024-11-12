@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/TimopheyKor/GamewormAPI/static"
 	"google.golang.org/api/sheets/v4"
 )
 
@@ -16,26 +17,26 @@ import (
 // newSheetDB takes a context and a sheets service, creates a new spreadsheet to
 // hold the Gameworm DB, initializes the schema of the DB, then returns the
 // spreadsheet's SheetID.
-func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
+func NewSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	// Create a new spreadsheet with three sheets:
 	spreadsheet, err := srv.Spreadsheets.Create(&sheets.Spreadsheet{
 		Properties: &sheets.SpreadsheetProperties{
-			Title: DbSpreadsheetName,
+			Title: static.DbSpreadsheetName,
 		},
 		Sheets: []*sheets.Sheet{
 			{
 				Properties: &sheets.SheetProperties{
-					Title: GameD,
+					Title: static.GameD,
 				},
 			},
 			{
 				Properties: &sheets.SheetProperties{
-					Title: ReviewD,
+					Title: static.ReviewD,
 				},
 			},
 			{
 				Properties: &sheets.SheetProperties{
-					Title: BacklogD,
+					Title: static.BacklogD,
 				},
 			},
 		},
@@ -47,15 +48,15 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	// Initialize the header values (column names) for the three sheets:
 	spreadsheetId := spreadsheet.SpreadsheetId
 	updateFn := prepInitUpdateCall(ctx, srv, spreadsheetId)
-	res, err := updateFn(GameD+"!A1:E1", GameCols)
+	res, err := updateFn(static.GameD+"!A1:E1", static.GameCols)
 	if err != nil {
 		return res, err
 	}
-	res, err = updateFn(ReviewD+"!A1:E1", ReviewCols)
+	res, err = updateFn(static.ReviewD+"!A1:E1", static.ReviewCols)
 	if err != nil {
 		return res, err
 	}
-	res, err = updateFn(BacklogD+"!A1:C1", BacklogCols)
+	res, err = updateFn(static.BacklogD+"!A1:C1", static.BacklogCols)
 	if err != nil {
 		return res, err
 	}
