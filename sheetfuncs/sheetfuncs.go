@@ -87,7 +87,21 @@ func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string
 // a function used to append new rows to a database, given a sheet and values.
 func prepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
 	return func(sheetName string, values []any) (string, error) {
-		return fmt.Sprint("Append call being implemented"), nil
+		inputLen := len(values)
+		switch {
+		case inputLen > 5:
+			return "", static.ErrInputOutOfRange
+		case inputLen == 0:
+			return "", static.ErrInputEmpty
+		}
+		res, err := srv.Spreadsheets.Values.Append(sheetId, sheetName, &sheets.ValueRange{
+			MajorDimension: "ROWS",
+			Values:         append([][]any{}, values),
+		}).ValueInputOption("RAW").Context(ctx).Do()
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("append response: %+v\n", res), err
 	}
 }
 

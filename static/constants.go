@@ -42,6 +42,8 @@ var (
 
 // Define global errors:
 var (
-	ErrTooManyMatches = errors.New("too many matches found")
-	ErrNoMatchesFound = errors.New("no matches found")
+	ErrTooManyMatches  = errors.New("too many matches found")
+	ErrNoMatchesFound  = errors.New("no matches found")
+	ErrInputOutOfRange = errors.New("input length exceeds schema definition")
+	ErrInputEmpty      = errors.New("empty input")
 )
