@@ -85,7 +85,7 @@ func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string
 // TODO: Write body for prepAppendCall.
 // prepAppendCall takes a context, sheets service, and sheet id, and returns
 // a function used to append new rows to a database, given a sheet and values.
-func prepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
+func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
 	return func(sheetName string, values []any) (string, error) {
 		inputLen := len(values)
 		switch {
@@ -108,7 +108,7 @@ func prepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) fu
 // TODO: Write body for prepReadCall.
 // prepReadCall takes a context, sheets service, and sheet id, and returns
 // a function used to read database rows given a range.
-func prepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
+func PrepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
 	return func(sRange string) (string, error) {
 		return fmt.Sprint("Read call being implemented"), nil
 	}
@@ -117,7 +117,7 @@ func prepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func
 // TODO: Write body for prepDeleteCall.
 // prepDeleteCall takes a context, sheets service, and sheet id, and returns
 // a function used to read database rows given a range.
-func prepDeleteCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
+func PrepDeleteCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
 	return func(sRange string) (string, error) {
 		return fmt.Sprint("Delete call being implemented"), nil
 	}
