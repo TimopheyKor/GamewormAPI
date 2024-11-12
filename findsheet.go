@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/TimopheyKor/GamewormAPI/static"
 	"google.golang.org/api/drive/v3"
 )
 
@@ -19,9 +20,9 @@ func getExistingSheetId(srv *drive.Service, name string) (string, error) {
 
 	// Handle errors & unexpected results:
 	if len(res.Files) > 1 {
-		return "", fmt.Errorf("%s: %w", name, ErrTooManyMatches)
+		return "", fmt.Errorf("%s: %w", name, static.ErrTooManyMatches)
 	} else if len(res.Files) == 0 || len(res.Files[0].Id) == 0 {
-		return "", fmt.Errorf("%s: %w", name, ErrNoMatchesFound)
+		return "", fmt.Errorf("%s: %w", name, static.ErrNoMatchesFound)
 	}
 	return res.Files[0].Id, nil
 }

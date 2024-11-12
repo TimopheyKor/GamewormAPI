@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/TimopheyKor/GamewormAPI/sheetfuncs"
+	"github.com/TimopheyKor/GamewormAPI/static"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
@@ -20,7 +22,7 @@ func main() {
 
 	// Setup config and get a client with that config:
 	// If modifying these scopes, delete your previously saved token.json.
-	b, err := os.ReadFile(clientConfigPath)
+	b, err := os.ReadFile(static.ClientConfigPath)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
@@ -44,21 +46,21 @@ func main() {
 
 	// Search for the database sheet. If the sheet isn't found, return
 	// the appropriate error, or create the databse sheet.
-	sheetId, err := getExistingSheetId(dSrvc, dbSpreadsheetName)
-	if err != nil && !errors.Is(err, ErrNoMatchesFound) {
+	sheetId, err := getExistingSheetId(dSrvc, static.DbSpreadsheetName)
+	if err != nil && !errors.Is(err, static.ErrNoMatchesFound) {
 		log.Fatalf("get existing sheet id: %s", err)
-	} else if errors.Is(err, ErrNoMatchesFound) {
+	} else if errors.Is(err, static.ErrNoMatchesFound) {
 		fmt.Printf("%s, creating new sheet for db\n", err)
-		sheetId, err = newSheetDB(ctx, sSrvc)
+		sheetId, err = sheetfuncs.NewSheetDB(ctx, sSrvc)
 		if err != nil {
 			log.Fatalf("failed to create new sheet db: %v", err)
 		}
 	} else {
-		fmt.Printf("existing sheet found: %s\n", dbSpreadsheetName)
+		fmt.Printf("existing sheet found: %s\n", static.DbSpreadsheetName)
 	}
 
 	// Read the first sheet of the sheetDB:
-	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, gameD+"!"+gameRange).Do()
+	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, static.GameD+"!"+static.GameRange).Do()
 	if err != nil {
 		log.Fatalf("Unable to retrieve data from sheet: %v", err)
 	}
