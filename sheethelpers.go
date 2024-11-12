@@ -46,7 +46,7 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 
 	// Initialize the header values (column names) for the three sheets:
 	spreadsheetId := spreadsheet.SpreadsheetId
-	updateFn := prepUpdateCall(ctx, srv, spreadsheetId)
+	updateFn := prepInitUpdateCall(ctx, srv, spreadsheetId)
 	res, err := updateFn(gameD+"!A1:E1", gameCols)
 	if err != nil {
 		return res, err
@@ -62,9 +62,9 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	return spreadsheetId, nil
 }
 
-// prepUpdateCall takes a context, sheets service, and sheet id, and returns
+// prepInitUpdateCall takes a context, sheets service, and sheet id, and returns
 // a function used to update database rows given a range and values.
-func prepUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, [][]any) (string, error) {
+func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, [][]any) (string, error) {
 	// Input: range string ("sheet_name!start_cell:end_cell"), 2D array of values
 	return func(sRange string, values [][]any) (string, error) {
 		res, err := srv.Spreadsheets.Values.Update(sheetId, sRange, &sheets.ValueRange{
