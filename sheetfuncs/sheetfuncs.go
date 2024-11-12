@@ -1,4 +1,4 @@
-package main
+package sheetfuncs
 
 import (
 	"context"
@@ -20,22 +20,22 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	// Create a new spreadsheet with three sheets:
 	spreadsheet, err := srv.Spreadsheets.Create(&sheets.Spreadsheet{
 		Properties: &sheets.SpreadsheetProperties{
-			Title: dbSpreadsheetName,
+			Title: DbSpreadsheetName,
 		},
 		Sheets: []*sheets.Sheet{
 			{
 				Properties: &sheets.SheetProperties{
-					Title: gameD,
+					Title: GameD,
 				},
 			},
 			{
 				Properties: &sheets.SheetProperties{
-					Title: reviewD,
+					Title: ReviewD,
 				},
 			},
 			{
 				Properties: &sheets.SheetProperties{
-					Title: backlogD,
+					Title: BacklogD,
 				},
 			},
 		},
@@ -47,15 +47,15 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 	// Initialize the header values (column names) for the three sheets:
 	spreadsheetId := spreadsheet.SpreadsheetId
 	updateFn := prepInitUpdateCall(ctx, srv, spreadsheetId)
-	res, err := updateFn(gameD+"!A1:E1", gameCols)
+	res, err := updateFn(GameD+"!A1:E1", GameCols)
 	if err != nil {
 		return res, err
 	}
-	res, err = updateFn(reviewD+"!A1:E1", reviewCols)
+	res, err = updateFn(ReviewD+"!A1:E1", ReviewCols)
 	if err != nil {
 		return res, err
 	}
-	res, err = updateFn(backlogD+"!A1:C1", backlogCols)
+	res, err = updateFn(BacklogD+"!A1:C1", BacklogCols)
 	if err != nil {
 		return res, err
 	}
@@ -77,6 +77,9 @@ func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string
 		return fmt.Sprintf("update response: %+v\n", res), err
 	}
 }
+
+// prepUpdateCall takes a context, sheets service, and sheet id, and returns
+// a function used to update a database row given a sheet
 
 // TODO: Write body for prepAppendCall.
 // prepAppendCall takes a context, sheets service, and sheet id, and returns
