@@ -65,6 +65,21 @@ func main() {
 		log.Fatalf("Unable to retrieve data from sheet: %v", err)
 	}
 
+	// Testing Append Function:
+	appendFn := sheetfuncs.PrepAppendCall(ctx, sSrvc, sheetId)
+	exGameInfo := []any{
+		"TESME1FDEVFPUB",
+		"TEST GAME 1",
+		"www.exampleimage.com/image.jpg",
+		"FAKE DEV",
+		"FAKE PUB",
+	}
+	res, err := appendFn(static.GameD+"!"+static.GameRange, exGameInfo)
+	if err != nil {
+		log.Fatalf("unable to append data to sheet: %v", err)
+	}
+	fmt.Printf("append response: %+v", res)
+
 	if len(resp.Values) == 0 {
 		fmt.Println("No data found.")
 	} else {
