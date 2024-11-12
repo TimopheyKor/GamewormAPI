@@ -10,9 +10,8 @@ import (
 
 // TODO: Make this function pull from a schema rather than constantcs for
 // creating the DB.
-// TODO: Consider creating a "sheetHolder" type that holds the context,
-// service, and sheetId (or sheet object itself if modifiable) rather than
-// passing through nested functions.
+// TODO: Make all the sheet-specific functions work off of the SheetWorker rather
+// then a wrapper function.
 
 // newSheetDB takes a context and a sheets service, creates a new spreadsheet to
 // hold the Gameworm DB, initializes the schema of the DB, then returns the
@@ -82,7 +81,7 @@ func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string
 // prepUpdateCall takes a context, sheets service, and sheet id, and returns
 // a function used to update a database row given a sheet
 
-// TODO: Write body for prepAppendCall.
+// TODO: Convert prepAppendCall to AppendToSheet as a method on SheetWorker.
 // prepAppendCall takes a context, sheets service, and sheet id, and returns
 // a function used to append new rows to a database, given a sheet and values.
 func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {

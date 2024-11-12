@@ -59,12 +59,6 @@ func main() {
 		fmt.Printf("existing sheet found: %s\n", static.DbSpreadsheetName)
 	}
 
-	// Read the first sheet of the sheetDB:
-	resp, err := sSrvc.Spreadsheets.Values.Get(sheetId, static.GameD+"!"+static.GameRange).Do()
-	if err != nil {
-		log.Fatalf("Unable to retrieve data from sheet: %v", err)
-	}
-
 	// Testing Append Function:
 	appendFn := sheetfuncs.PrepAppendCall(ctx, sSrvc, sheetId)
 	exGameInfo := []any{
@@ -80,13 +74,16 @@ func main() {
 	}
 	fmt.Printf("append response: %+v", res)
 
-	if len(resp.Values) == 0 {
-		fmt.Println("No data found.")
-	} else {
-		fmt.Printf("Example sheet data found:\n%+v\n", resp.Values)
-		// for _, row := range resp.Values {
-		// 	// Print columns A and E, which correspond to indices 0 and 4.
-		// 	fmt.Printf("%s, %s\n", row[0], row[4])
-		// }
+	// Testing GameIdExists function and SheetWorker:
+	testSheetWorker := sheetfuncs.NewSheetWorker(ctx, sSrvc, sheetId)
+	val, err := testSheetWorker.GameIdExists("BOB", static.GameD)
+	if err != nil {
+		log.Fatalf("unable to check for ID: %v", err)
 	}
+	fmt.Printf("GameIdExists(BOB, GameD): %v", val)
+	val, err = testSheetWorker.GameIdExists("TESME1FDEVFPUB", static.GameD)
+	if err != nil {
+		log.Fatalf("unable to check for ID: %v", err)
+	}
+	fmt.Printf("GameIdExists(TESME1FDEVFPUB, GameD): %v", val)
 }
