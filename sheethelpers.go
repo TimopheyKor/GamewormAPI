@@ -9,6 +9,9 @@ import (
 
 // TODO: Make this function pull from a schema rather than constantcs for
 // creating the DB.
+// TODO: Consider creating a "sheetHolder" type that holds the context,
+// service, and sheetId (or sheet object itself if modifiable) rather than
+// passing through nested functions.
 
 // newSheetDB takes a context and a sheets service, creates a new spreadsheet to
 // hold the Gameworm DB, initializes the schema of the DB, then returns the
@@ -62,6 +65,7 @@ func newSheetDB(ctx context.Context, srv *sheets.Service) (string, error) {
 // prepUpdateCall takes a context, sheets service, and sheet id, and returns
 // a function used to update database rows given a range and values.
 func prepUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, [][]any) (string, error) {
+	// Input: range string ("sheet_name!start_cell:end_cell"), 2D array of values
 	return func(sRange string, values [][]any) (string, error) {
 		res, err := srv.Spreadsheets.Values.Update(sheetId, sRange, &sheets.ValueRange{
 			MajorDimension: "ROWS",
@@ -71,5 +75,32 @@ func prepUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string) fu
 			return "", err
 		}
 		return fmt.Sprintf("update response: %+v\n", res), err
+	}
+}
+
+// TODO: Write body for prepAppendCall.
+// prepAppendCall takes a context, sheets service, and sheet id, and returns
+// a function used to append new rows to a database, given a sheet and values.
+func prepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
+	return func(sheetName string, values []any) (string, error) {
+		return fmt.Sprint("Append call being implemented"), nil
+	}
+}
+
+// TODO: Write body for prepReadCall.
+// prepReadCall takes a context, sheets service, and sheet id, and returns
+// a function used to read database rows given a range.
+func prepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
+	return func(sRange string) (string, error) {
+		return fmt.Sprint("Read call being implemented"), nil
+	}
+}
+
+// TODO: Write body for prepDeleteCall.
+// prepDeleteCall takes a context, sheets service, and sheet id, and returns
+// a function used to read database rows given a range.
+func prepDeleteCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
+	return func(sRange string) (string, error) {
+		return fmt.Sprint("Delete call being implemented"), nil
 	}
 }
