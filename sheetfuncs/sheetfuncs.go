@@ -84,18 +84,38 @@ func prepInitUpdateCall(ctx context.Context, srv *sheets.Service, sheetId string
 // TODO: Convert prepAppendCall to AppendToSheet as a method on SheetWorker.
 // prepAppendCall takes a context, sheets service, and sheet id, and returns
 // a function used to append new rows to a database, given a sheet and values.
-func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
-	return func(sheetName string, values []any) (string, error) {
-		inputLen := len(values)
-		switch {
-		case inputLen > 5:
-			return "", static.ErrInputOutOfRange
-		case inputLen == 0:
-			return "", static.ErrInputEmpty
-		}
+//
+//	func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, []any) (string, error) {
+//		return func(sheetName string, values []any) (string, error) {
+//			inputLen := len(values)
+//			switch {
+//			case inputLen > 5:
+//				return "", static.ErrInputOutOfRange
+//			case inputLen == 0:
+//				return "", static.ErrInputEmpty
+//			}
+//			res, err := srv.Spreadsheets.Values.Append(sheetId, sheetName, &sheets.ValueRange{
+//				MajorDimension: "ROWS",
+//				Values:         append([][]any{}, values),
+//			}).ValueInputOption("RAW").Context(ctx).Do()
+//			if err != nil {
+//				return "", err
+//			}
+//			return fmt.Sprintf("append response: %+v\n", res), err
+//		}
+//	}
+func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string, [5]any) (string, error) {
+	return func(sheetName string, values [5]any) (string, error) {
+		// inputLen := len(values)
+		// switch {
+		// case inputLen > 5:
+		// 	return "", static.ErrInputOutOfRange
+		// case inputLen == 0:
+		// 	return "", static.ErrInputEmpty
+		// }
 		res, err := srv.Spreadsheets.Values.Append(sheetId, sheetName, &sheets.ValueRange{
 			MajorDimension: "ROWS",
-			Values:         append([][]any{}, values),
+			Values:         append([][]any{}, values[:]),
 		}).ValueInputOption("RAW").Context(ctx).Do()
 		if err != nil {
 			return "", err
@@ -109,7 +129,7 @@ func PrepAppendCall(ctx context.Context, srv *sheets.Service, sheetId string) fu
 // a function used to read database rows given a range.
 func PrepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
 	return func(sRange string) (string, error) {
-		return fmt.Sprint("Read call being implemented"), nil
+		return "Read call being implemented", nil
 	}
 }
 
@@ -118,6 +138,6 @@ func PrepReadCall(ctx context.Context, srv *sheets.Service, sheetId string) func
 // a function used to read database rows given a range.
 func PrepDeleteCall(ctx context.Context, srv *sheets.Service, sheetId string) func(string) (string, error) {
 	return func(sRange string) (string, error) {
-		return fmt.Sprint("Delete call being implemented"), nil
+		return "Delete call being implemented", nil
 	}
 }
