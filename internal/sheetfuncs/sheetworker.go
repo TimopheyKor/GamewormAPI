@@ -45,7 +45,7 @@ func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 	return false, nil
 }
 
-// TODO: Implement schema assertion checks as part of the AddNewGame func.
+// TODO: Implement more schema assertion checks as part of the AddNewGame func.
 // AddNewGame takes an array of values and attempts to append them to the
 // Game table of the GamewormDB spreadsheet, returning the HTTP response and
 // an error.
@@ -72,3 +72,22 @@ func (w *SheetsHolder) AddNewGame(values []any) (string, error) {
 	}
 	return fmt.Sprintf("append response: %+v", res), nil
 }
+
+// Consider having the two delete functions be a single function with a variatic
+// parameter of table names. Delete from all the table names provided, if the
+// Games table is included, then delete from all tables.
+// TODO: Implement FullDeleteGame.
+// FullDeleteGame completely removes a game from all tables. There should
+// always be a check before this is called instead of RemoveGame.
+func (w *SheetsHolder) FullDeleteGame(gameId string) {}
+
+// TODO: Implement DeleteGame.
+// DeleteGame takes a gameId and a table for the game to be removed from,
+// then attempts to remove it from that table. It will not work on the Games
+// table - for deleting a game entirely, use FullDeleteGame.
+func (w *SheetsHolder) DeleteGame(gameId, table string) {}
+
+// TODO: Implement GetGames. Decide if it should be table-specific or split
+// into different functions for different tables (as it would be returning
+// different length sets of arrays based on the table.)
+func (w *SheetsHolder) GetGames(table string) {}
