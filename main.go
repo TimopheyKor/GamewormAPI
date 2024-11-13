@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/TimopheyKor/GamewormAPI/sheetfuncs"
-	"github.com/TimopheyKor/GamewormAPI/static"
+	"github.com/TimopheyKor/GamewormAPI/internal/sheetfuncs"
+	"github.com/TimopheyKor/GamewormAPI/internal/static"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"

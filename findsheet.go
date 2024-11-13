@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/TimopheyKor/GamewormAPI/static"
+	"github.com/TimopheyKor/GamewormAPI/internal/static"
 	"google.golang.org/api/drive/v3"
 )
 

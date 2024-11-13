@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/TimopheyKor/GamewormAPI/static"
+	"github.com/TimopheyKor/GamewormAPI/internal/static"
 	"google.golang.org/api/sheets/v4"
 )
 
