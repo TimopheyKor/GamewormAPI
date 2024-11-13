@@ -59,21 +59,6 @@ func main() {
 		fmt.Printf("existing sheet found: %s\n", static.DbSpreadsheetName)
 	}
 
-	// Testing Append Function:
-	appendFn := sheetfuncs.PrepAppendCall(ctx, sSrvc, sheetId)
-	exGameInfo := []any{
-		"TESME1FDEVFPUB",
-		"TEST GAME 1",
-		"www.exampleimage.com/image.jpg",
-		"FAKE DEV",
-		"FAKE PUB",
-	}
-	res, err := appendFn(static.GameD+"!"+static.GameRange, exGameInfo)
-	if err != nil {
-		log.Fatalf("unable to append data to sheet: %v", err)
-	}
-	fmt.Printf("append response: %+v", res)
-
 	// Testing GameIdExists function and SheetsHolder:
 	testSheetsHolder := sheetfuncs.NewSheetsHolder(ctx, sSrvc, sheetId)
 	val, err := testSheetsHolder.GameIdExists("BOB", static.GameD)
@@ -86,4 +71,19 @@ func main() {
 		log.Fatalf("unable to check for ID: %v", err)
 	}
 	fmt.Printf("GameIdExists(TESME1FDEVFPUB, GameD): %v", val)
+
+	// Testing AddNewGame function
+	exGameInfo := []any{
+		"TESME1FDEVFPUB",
+		"TEST GAME 1",
+		"www.exampleimage.com/image.jpg",
+		"FAKE DEV",
+		"FAKE PUB",
+	}
+
+	res, err := testSheetsHolder.AddNewGame(exGameInfo)
+	if err != nil {
+		log.Fatalf("unable to append data to sheet: %v", err)
+	}
+	fmt.Printf("append response: %+v", res)
 }

@@ -60,21 +60,3 @@ func (w *SheetsHolder) AddNewGame(values []any) (string, error) {
 	}
 	return fmt.Sprintf("append response: %+v", res), nil
 }
-
-// return func(sheetName string, values []any) (string, error) {
-// 	inputLen := len(values)
-// 	switch {
-// 	case inputLen > 5:
-// 		return "", static.ErrInputOutOfRange
-// 	case inputLen == 0:
-// 		return "", static.ErrInputEmpty
-// 	}
-// 	res, err := srv.Spreadsheets.Values.Append(sheetId, sheetName, &sheets.ValueRange{
-// 		MajorDimension: "ROWS",
-// 		Values:         append([][]any{}, values),
-// 	}).ValueInputOption("RAW").Context(ctx).Do()
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return fmt.Sprintf("append response: %+v\n", res), err
-// }
