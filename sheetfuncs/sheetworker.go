@@ -2,12 +2,14 @@ package sheetfuncs
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/TimopheyKor/GamewormAPI/static"
 	"google.golang.org/api/sheets/v4"
 )
 
-// TODO: Think of a name that doesn't include Worker.
+// SheetsHolder retains essential and frequently reused data for interacting
+// with a Google Spreadsheet via the Google Sheets v4 API.
 type SheetsHolder struct {
 	Ctx     context.Context
 	Srv     *sheets.Service
@@ -43,12 +45,20 @@ func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 	return false, nil
 }
 
-// TODO: Implement AddNewGame so that it replaces the Append functionality.
-// This function should specifically be for adding a game to the first sheet -
-// adding games to the Reviews section or Backlog should stem from an existing
-// game in the first sheet.
-func (w *SheetsHolder) AddNewGame(range_ string, values []any) (string, error) {
-	return "", nil
+// TODO: Implement schema assertion checks as part of the AddNewGame func.
+// AddNewGame takes an array of values and attempts to append them to the
+// Game table of the GamewormDB spreadsheet, returning the HTTP response and
+// an error.
+func (w *SheetsHolder) AddNewGame(values []any) (string, error) {
+	range_ := static.GameD + "!" + static.GameRange
+	res, err := w.Srv.Spreadsheets.Values.Append(w.SheetId, range_, &sheets.ValueRange{
+		MajorDimension: "ROWS",
+		Values:         append([][]any{}, values),
+	}).ValueInputOption("RAW").Context(w.Ctx).Do()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("append response: %+v", res), nil
 }
 
 // return func(sheetName string, values []any) (string, error) {
