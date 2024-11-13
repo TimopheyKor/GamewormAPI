@@ -74,14 +74,14 @@ func main() {
 	}
 	fmt.Printf("append response: %+v", res)
 
-	// Testing GameIdExists function and SheetWorker:
-	testSheetWorker := sheetfuncs.NewSheetWorker(ctx, sSrvc, sheetId)
-	val, err := testSheetWorker.GameIdExists("BOB", static.GameD)
+	// Testing GameIdExists function and SheetsHolder:
+	testSheetsHolder := sheetfuncs.NewSheetsHolder(ctx, sSrvc, sheetId)
+	val, err := testSheetsHolder.GameIdExists("BOB", static.GameD)
 	if err != nil {
 		log.Fatalf("unable to check for ID: %v", err)
 	}
 	fmt.Printf("GameIdExists(BOB, GameD): %v", val)
-	val, err = testSheetWorker.GameIdExists("TESME1FDEVFPUB", static.GameD)
+	val, err = testSheetsHolder.GameIdExists("TESME1FDEVFPUB", static.GameD)
 	if err != nil {
 		log.Fatalf("unable to check for ID: %v", err)
 	}

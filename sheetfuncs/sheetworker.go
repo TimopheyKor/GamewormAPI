@@ -8,17 +8,17 @@ import (
 )
 
 // TODO: Think of a name that doesn't include Worker.
-type SheetWorker struct {
+type SheetsHolder struct {
 	Ctx     context.Context
 	Srv     *sheets.Service
 	SheetId string
 }
 
-// NewSheetWorker takes a context, sheets service, and sheetId, and
-// creates and initializes a new SheetWorker, which is used
+// NewSheetsHolder takes a context, sheets service, and sheetId, and
+// creates and initializes a new SheetsHolder, which is used
 // to run functions on a given sheet.
-func NewSheetWorker(ctx context.Context, srv *sheets.Service, sheetId string) *SheetWorker {
-	return &SheetWorker{
+func NewSheetsHolder(ctx context.Context, srv *sheets.Service, sheetId string) *SheetsHolder {
+	return &SheetsHolder{
 		Ctx:     ctx,
 		Srv:     srv,
 		SheetId: sheetId,
@@ -27,7 +27,7 @@ func NewSheetWorker(ctx context.Context, srv *sheets.Service, sheetId string) *S
 
 // GameIdExists takes a gameId and table name, returning True if
 // it already exists in the table, false otherwise.
-func (w *SheetWorker) GameIdExists(gameId, table string) (bool, error) {
+func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 	res, err := w.Srv.Spreadsheets.Values.Get(w.SheetId, table+"!A1:A").Do()
 	if err != nil {
 		return false, err
@@ -47,7 +47,7 @@ func (w *SheetWorker) GameIdExists(gameId, table string) (bool, error) {
 // This function should specifically be for adding a game to the first sheet -
 // adding games to the Reviews section or Backlog should stem from an existing
 // game in the first sheet.
-func (w *SheetWorker) AddNewGame(range_ string, values []any) (string, error) {
+func (w *SheetsHolder) AddNewGame(range_ string, values []any) (string, error) {
 	return "", nil
 }
 
