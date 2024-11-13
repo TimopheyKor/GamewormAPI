@@ -63,14 +63,14 @@ func main() {
 	testSheetsHolder := sheetfuncs.NewSheetsHolder(ctx, sSrvc, sheetId)
 	val, err := testSheetsHolder.GameIdExists("BOB", static.GameD)
 	if err != nil {
-		log.Fatalf("unable to check for ID: %v", err)
+		log.Fatalf("unable to check for ID: %v\n", err)
 	}
-	fmt.Printf("GameIdExists(BOB, GameD): %v", val)
+	fmt.Printf("GameIdExists(BOB, GameD): %v\n", val)
 	val, err = testSheetsHolder.GameIdExists("TESME1FDEVFPUB", static.GameD)
 	if err != nil {
-		log.Fatalf("unable to check for ID: %v", err)
+		log.Fatalf("unable to check for ID: %v\n", err)
 	}
-	fmt.Printf("GameIdExists(TESME1FDEVFPUB, GameD): %v", val)
+	fmt.Printf("GameIdExists(TESME1FDEVFPUB, GameD): %v\n", val)
 
 	// Testing AddNewGame function
 	exGameInfo := []any{
@@ -83,7 +83,7 @@ func main() {
 
 	res, err := testSheetsHolder.AddNewGame(exGameInfo)
 	if err != nil {
-		log.Fatalf("unable to append data to sheet: %v", err)
+		log.Fatalf("unable to append data to sheet: %v\n", err)
 	}
-	fmt.Printf("append response: %+v", res)
+	fmt.Printf("append response: %+v\n", res)
 }

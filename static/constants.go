@@ -46,4 +46,5 @@ var (
 	ErrNoMatchesFound  = errors.New("no matches found")
 	ErrInputOutOfRange = errors.New("input length exceeds schema definition")
 	ErrInputEmpty      = errors.New("empty input")
+	ErrDuplicateGameID = errors.New("game id already exists in games table")
 )

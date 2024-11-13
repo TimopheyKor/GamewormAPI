@@ -50,6 +50,18 @@ func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 // Game table of the GamewormDB spreadsheet, returning the HTTP response and
 // an error.
 func (w *SheetsHolder) AddNewGame(values []any) (string, error) {
+	// Check if the game already exists:
+	gameId := fmt.Sprintf("%v", values[static.GamePK])
+	gameExists, err := w.GameIdExists(gameId, static.GameD)
+	fmt.Printf("gameId %v exists: %v\n", gameId, gameExists)
+	if err != nil {
+		return "", err
+	}
+	if gameExists {
+		return "", static.ErrDuplicateGameID
+	}
+
+	// Append a new row with that game's data:
 	range_ := static.GameD + "!" + static.GameRange
 	res, err := w.Srv.Spreadsheets.Values.Append(w.SheetId, range_, &sheets.ValueRange{
 		MajorDimension: "ROWS",
