@@ -5,24 +5,25 @@ package schema
 // GamewormAPI with game data and pushing or editing game data in Google Sheets.
 type GameObject struct {
 	id        string
-	Title     string
+	title     string
 	Image     string
-	Developer string
+	developer string
 	Publisher string
 }
 
 // NewGameObject requires a title and dev string, then takes additional option
 // functions, and returns a pointer to a new game object constructed with
 // the given parameters.
-func (g *GameObject) NewGameObject(title, dev string, opts ...GameOption) *GameObject {
-	// Create an ID from the required parameters:
-	adjTitle, adjDev := TrimExtendStr(title), TrimExtendStr(dev)
-	idx := len(adjTitle) - 3
-	genId := adjTitle[:3] + adjTitle[idx:] + 
-	return &GameObject{
-		Id:    title[],
-		Title: title,
+func NewGameObject(title, dev string, opts ...GameOption) *GameObject {
+	newGameObj := &GameObject{
+		id:        GenerateGameID(title, dev),
+		title:     title,
+		developer: dev,
 	}
+	for _, opt := range opts {
+		opt(newGameObj)
+	}
+	return newGameObj
 }
 
 // GetID returns the id of the GameObject.

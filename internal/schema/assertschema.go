@@ -2,12 +2,14 @@ package schema
 
 import "strings"
 
-// TODO: Write a function that generates a UNIQUE GAME ID for a game.
-// This should maybe go in a different package.
-// Maybe convert the values input to a JSON input when making the frontend.
-func NewGameData(values []string) ([]any, error) {
-	// resp := []any{values}
-	return nil, nil
+// GenerateGameID takes two strings (game title and developer) then returns
+// the corresponding generated ID.
+func GenerateGameID(title, dev string) string {
+	// Create an ID from the required parameters:
+	adjTitle, adjDev := TrimExtendStr(title), TrimExtendStr(dev)
+	idx := len(adjTitle) - 3
+	genId := adjTitle[:3] + adjTitle[idx:] + adjDev[:3]
+	return genId
 }
 
 // TODO: Write a function that asserts that a game update or append call comes

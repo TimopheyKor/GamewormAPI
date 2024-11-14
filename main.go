@@ -9,6 +9,7 @@ import (
 
 	"github.com/TimopheyKor/GamewormAPI/internal/sheetfuncs"
 	"github.com/TimopheyKor/GamewormAPI/internal/static"
+	"github.com/TimopheyKor/GamewormAPI/internal/schema"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
@@ -73,10 +74,11 @@ func main() {
 	fmt.Printf("GameIdExists(TESME1FDEVFPUB, GameD): %v\n", val)
 
 	// Testing AddNewGame function
-	exGameInfo := []any{
-		"TESME1FDEVFPUB",
+	exGameInfo := schema.NewGameObject(
 		"TEST GAME 1",
 		"www.exampleimage.com/image.jpg",
+	)
+
 		"FAKE DEV",
 		"FAKE PUB",
 	}

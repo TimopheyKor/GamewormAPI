@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/TimopheyKor/GamewormAPI/internal/schema"
 	"github.com/TimopheyKor/GamewormAPI/internal/static"
 	"google.golang.org/api/sheets/v4"
 )
@@ -49,11 +50,11 @@ func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 // AddNewGame takes an array of values and attempts to append them to the
 // Game table of the GamewormDB spreadsheet, returning the HTTP response and
 // an error.
-func (w *SheetsHolder) AddNewGame(values []any) (string, error) {
+func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 	// Check if the game already exists:
-	gameId := fmt.Sprintf("%v", values[static.GamePK])
+
 	gameExists, err := w.GameIdExists(gameId, static.GameD)
-	fmt.Printf("gameId %v exists: %v\n", gameId, gameExists)
+
 	if err != nil {
 		return "", err
 	}
