@@ -52,9 +52,7 @@ func (w *SheetsHolder) GameIdExists(gameId, table string) (bool, error) {
 // an error.
 func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 	// Check if the game already exists:
-
-	gameExists, err := w.GameIdExists(gameId, static.GameD)
-
+	gameExists, err := w.GameIdExists(g.GetID(), static.GameD)
 	if err != nil {
 		return "", err
 	}
@@ -66,7 +64,7 @@ func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 	range_ := static.GameD + "!" + static.GameRange
 	res, err := w.Srv.Spreadsheets.Values.Append(w.SheetId, range_, &sheets.ValueRange{
 		MajorDimension: "ROWS",
-		Values:         append([][]any{}, values),
+		Values:         append([][]any{}, g.ToSlice()),
 	}).ValueInputOption("RAW").Context(w.Ctx).Do()
 	if err != nil {
 		return "", err

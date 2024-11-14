@@ -30,3 +30,7 @@ func NewGameObject(title, dev string, opts ...GameOption) *GameObject {
 func (g *GameObject) GetID() string {
 	return g.id
 }
+
+func (g *GameObject) ToSlice() []any {
+	return []any{g.id, g.title, g.Image, g.developer, g.Publisher}
+}
