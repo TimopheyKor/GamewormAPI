@@ -7,9 +7,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/TimopheyKor/GamewormAPI/internal/schema"
 	"github.com/TimopheyKor/GamewormAPI/internal/sheetfuncs"
 	"github.com/TimopheyKor/GamewormAPI/internal/static"
-	"github.com/TimopheyKor/GamewormAPI/internal/schema"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
@@ -76,12 +76,10 @@ func main() {
 	// Testing AddNewGame function
 	exGameInfo := schema.NewGameObject(
 		"TEST GAME 1",
-		"www.exampleimage.com/image.jpg",
-	)
-
 		"FAKE DEV",
-		"FAKE PUB",
-	}
+		schema.WithImg("www.exampleimage.com/image.jpg"),
+		schema.WithPub("FAKE PUBLISHER"),
+	)
 
 	res, err := testSheetsHolder.AddNewGame(exGameInfo)
 	if err != nil {
