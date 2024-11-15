@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"net/url"
+
 	"github.com/TimopheyKor/GamewormAPI/internal/schema"
 	"github.com/TimopheyKor/GamewormAPI/internal/sheetfuncs"
 	"github.com/TimopheyKor/GamewormAPI/internal/static"
@@ -18,6 +20,13 @@ import (
 
 func main() {
 	// Google Cloud OAuth Process:
+	fmt.Println("Testing from alternate machine...")
+	// TODO: Auth code sometimes encodes as URL and needs to be decoded before working, figure out how
+	// to automate this:
+	encodedString := ""
+	decodedString, err := url.QueryUnescape(encodedString)
+	fmt.Printf("Auth Code Decode: %v\n", decodedString)
+
 	fmt.Println("Processing Google Cloud OAuth...")
 	ctx := context.Background()
 
