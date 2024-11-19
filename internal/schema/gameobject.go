@@ -31,6 +31,10 @@ func (g *GameObject) GetID() string {
 	return g.id
 }
 
+// ToSlice is a method on GameObject that returns a slice of any type containing
+// the primary fields of the GameObject. This is primarily for the use of
+// passing game data to the Google Sheets API in a recognizable format that
+// adheres to the GamewormDB Schema.
 func (g *GameObject) ToSlice() []any {
 	return []any{g.id, g.title, g.Image, g.developer, g.Publisher}
 }
