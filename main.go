@@ -93,7 +93,7 @@ func main() {
 
 	res, err := testSheetsHolder.AddNewGame(exGameInfo)
 	if err != nil {
-		//log.Fatalf("unable to append data to sheet: %v\n", err)
+		log.Fatalf("unable to append data to sheet: %v\n", err)
 	}
 	fmt.Printf("append response: %+v\n", res)
 
