@@ -72,10 +72,6 @@ func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 	return fmt.Sprintf("append response: %+v", res), nil
 }
 
-// Consider having the two delete functions be a single function with a variatic
-// parameter of table names. Delete from all the table names provided, if the
-// Games table is included, then delete from all tables.
-// TODO: Implement DeleteGame.
 // DeleteGame removes the game provided from the tables provided.
 // TODO: Add functionality so that if the Games table is provided, delete from
 // all tables.
@@ -112,7 +108,7 @@ func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
 	res, err := w.Srv.Spreadsheets.BatchUpdate(w.SheetId, &sheets.BatchUpdateSpreadsheetRequest{
 		IncludeSpreadsheetInResponse: false,
 		Requests: []*sheets.Request{
-			&sheets.Request{
+			{
 				DeleteRange: &sheets.DeleteRangeRequest{
 					Range: &sheets.GridRange{
 						SheetId:          tableSheetId,

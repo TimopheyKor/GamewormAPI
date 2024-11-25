@@ -93,7 +93,13 @@ func main() {
 
 	res, err := testSheetsHolder.AddNewGame(exGameInfo)
 	if err != nil {
-		log.Fatalf("unable to append data to sheet: %v\n", err)
+		//log.Fatalf("unable to append data to sheet: %v\n", err)
 	}
 	fmt.Printf("append response: %+v\n", res)
+
+	res, err = testSheetsHolder.DeleteGame("TESME1FAK", static.GameD)
+	if err != nil {
+		log.Fatalf("unable to delete game from sheet: %v\n", err)
+	}
+	fmt.Printf("delete game response: %+v\n", res)
 }
