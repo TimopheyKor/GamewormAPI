@@ -118,4 +118,5 @@ func (w *SheetsHolder) getTableSheetId(table string) (int64, error) {
 			return sheet.Properties.SheetId, nil
 		}
 	}
+	return 0, static.ErrSheetNotFound
 }
