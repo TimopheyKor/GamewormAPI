@@ -17,6 +17,7 @@ const (
 	ReviewRange       = "A1:C"
 	BacklogD          = "Backlog"
 	BacklogRange      = "A1:E"
+	maxColIdx         = 6
 	// TODO: Move this path to a more secure location when hosting.
 	ClientConfigPath = "C:/data/temp_credentials/credentials.json"
 )
