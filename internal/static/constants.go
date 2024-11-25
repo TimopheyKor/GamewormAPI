@@ -49,4 +49,5 @@ var (
 	ErrInputEmpty      = errors.New("empty input")
 	ErrDuplicateGameID = errors.New("game id already exists in games table")
 	ErrSheetNotFound   = errors.New("sheet name not found in spreadsheet data")
+	ErrNoDataFound     = errors.New("no data found in sheet")
 )

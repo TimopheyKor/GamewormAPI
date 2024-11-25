@@ -12,7 +12,7 @@ import (
 // SheetsHolder retains essential and frequently reused data for interacting
 // with a Google Spreadsheet via the Google Sheets v4 API.
 type SheetsHolder struct {
-	Ctx     context.Context
+	Ctx     context.Context //TODO: handle context differently as it can change with requests from frontend
 	Srv     *sheets.Service
 	SheetId string
 }
@@ -76,29 +76,60 @@ func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 // parameter of table names. Delete from all the table names provided, if the
 // Games table is included, then delete from all tables.
 // TODO: Implement DeleteGame.
-// DeleteGame removes the game provided from the tables provided. If the Games
-// table is provided, delete from all tables.
+// DeleteGame removes the game provided from the tables provided.
+// TODO: Add functionality so that if the Games table is provided, delete from
+// all tables.
 func (w *SheetsHolder) DeleteGame(gameId string, tables ...string) (string, error) {
+	res := ""
 	for _, table := range tables {
-
+		readRange := table + "!A1:A"
+		data, err := w.Srv.Spreadsheets.Values.Get(w.SheetId, readRange).Do()
+		if err != nil {
+			return "", err
+		}
+		if len(data.Values) == 0 {
+			return "", static.ErrNoDataFound
+		} else {
+			for rowIdx, row := range data.Values {
+				if row[static.GamePK] == gameId {
+					res, err = w.deleteRow(int64(rowIdx), table)
+					if err != nil {
+						return fmt.Sprintf("delete row response: %+v", res), err
+					}
+				}
+			}
+		}
 	}
+	return fmt.Sprintf("delete game response: %+v", res), nil
 }
 
 // deleteRow is used to delete a row of data from a table given a row index.
-func (w *SheetsHolder) deleteRow(rowIdx int, table string) (string, error) {
-	callRes := w.Srv.Spreadsheets.BatchUpdate(w.SheetId, &sheets.BatchUpdateSpreadsheetRequest{
+func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
+	tableSheetId, err := w.getTableSheetId(table)
+	if err != nil {
+		return "get table sheet id response:", err
+	}
+	res, err := w.Srv.Spreadsheets.BatchUpdate(w.SheetId, &sheets.BatchUpdateSpreadsheetRequest{
 		IncludeSpreadsheetInResponse: false,
 		Requests: []*sheets.Request{
 			&sheets.Request{
 				DeleteRange: &sheets.DeleteRangeRequest{
 					Range: &sheets.GridRange{
-						SheetId: w.SheetId,
+						SheetId:          tableSheetId,
+						StartRowIndex:    rowIdx,
+						EndRowIndex:      rowIdx + 1,
+						StartColumnIndex: 0,
+						EndColumnIndex:   static.MaxColIdx + 1,
 					},
 					ShiftDimension: "ROWS",
 				},
 			},
 		},
-	})
+	}).Context(w.Ctx).Do()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("batch update response: %+v", res), nil
 }
 
 // TODO: Implement GetGames. Decide if it should be table-specific or split
