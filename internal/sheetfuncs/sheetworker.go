@@ -84,6 +84,14 @@ func (w *SheetsHolder) DeleteGame(gameId string, tables ...string) (string, erro
 	}
 }
 
+// deleteRow is used to delete a row of data from a table given a range.
+func (w *SheetsHolder) deleteRow(_range, table string) (string, error) {
+	callRes := w.Srv.Spreadsheets.BatchUpdate(w.SheetId, &sheets.BatchUpdateSpreadsheetRequest{
+		IncludeSpreadsheetInResponse: false,
+		Requests:                     []*sheets.Request{},
+	})
+}
+
 // TODO: Implement GetGames. Decide if it should be table-specific or split
 // into different functions for different tables (as it would be returning
 // different length sets of arrays based on the table.)
