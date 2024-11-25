@@ -22,7 +22,8 @@ func main() {
 	// Google Cloud OAuth Process:
 	fmt.Println("Testing from alternate machine...")
 	// TODO: Auth code sometimes encodes as URL and needs to be decoded before working, figure out how
-	// to automate this:
+	// to automate this.
+	// Steps to automate likely include getting the resulting URL after visiting the authURL in token.go.
 	encodedString := ""
 	decodedString, err := url.QueryUnescape(encodedString)
 	fmt.Printf("Auth Code Decode: %v\n", decodedString)
