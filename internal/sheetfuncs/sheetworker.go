@@ -75,16 +75,14 @@ func (w *SheetsHolder) AddNewGame(g *schema.GameObject) (string, error) {
 // Consider having the two delete functions be a single function with a variatic
 // parameter of table names. Delete from all the table names provided, if the
 // Games table is included, then delete from all tables.
-// TODO: Implement FullDeleteGame.
-// FullDeleteGame completely removes a game from all tables. There should
-// always be a check before this is called instead of RemoveGame.
-func (w *SheetsHolder) FullDeleteGame(gameId string) {}
-
 // TODO: Implement DeleteGame.
-// DeleteGame takes a gameId and a table for the game to be removed from,
-// then attempts to remove it from that table. It will not work on the Games
-// table - for deleting a game entirely, use FullDeleteGame.
-func (w *SheetsHolder) DeleteGame(gameId, table string) {}
+// DeleteGame removes the game provided from the tables provided. If the Games
+// table is provided, delete from all tables.
+func (w *SheetsHolder) DeleteGame(gameId string, tables ...string) (string, error) {
+	for _, table := range tables {
+
+	}
+}
 
 // TODO: Implement GetGames. Decide if it should be table-specific or split
 // into different functions for different tables (as it would be returning
