@@ -48,4 +48,5 @@ var (
 	ErrInputOutOfRange = errors.New("input length exceeds schema definition")
 	ErrInputEmpty      = errors.New("empty input")
 	ErrDuplicateGameID = errors.New("game id already exists in games table")
+	ErrSheetNotFound   = errors.New("sheet name not found in spreadsheet data")
 )

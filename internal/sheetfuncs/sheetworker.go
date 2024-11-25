@@ -84,11 +84,20 @@ func (w *SheetsHolder) DeleteGame(gameId string, tables ...string) (string, erro
 	}
 }
 
-// deleteRow is used to delete a row of data from a table given a range.
-func (w *SheetsHolder) deleteRow(_range, table string) (string, error) {
+// deleteRow is used to delete a row of data from a table given a row index.
+func (w *SheetsHolder) deleteRow(rowIdx int, table string) (string, error) {
 	callRes := w.Srv.Spreadsheets.BatchUpdate(w.SheetId, &sheets.BatchUpdateSpreadsheetRequest{
 		IncludeSpreadsheetInResponse: false,
-		Requests:                     []*sheets.Request{},
+		Requests: []*sheets.Request{
+			&sheets.Request{
+				DeleteRange: &sheets.DeleteRangeRequest{
+					Range: &sheets.GridRange{
+						SheetId: w.SheetId,
+					},
+					ShiftDimension: "ROWS",
+				},
+			},
+		},
 	})
 }
 
@@ -96,3 +105,17 @@ func (w *SheetsHolder) deleteRow(_range, table string) (string, error) {
 // into different functions for different tables (as it would be returning
 // different length sets of arrays based on the table.)
 func (w *SheetsHolder) GetGames(table string) {}
+
+// getTableSheetId gets the SheetId of a specific table given the table's
+// sheet name.
+func (w *SheetsHolder) getTableSheetId(table string) (int64, error) {
+	spreadsheetData, err := w.Srv.Spreadsheets.Get(w.SheetId).Context(w.Ctx).Do()
+	if err != nil {
+		return 0, err
+	}
+	for _, sheet := range spreadsheetData.Sheets {
+		if sheet.Properties.Title == table {
+			return sheet.Properties.SheetId, nil
+		}
+	}
+}
