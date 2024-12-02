@@ -129,6 +129,7 @@ func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
 }
 
 // TODO: Consider what formats should be returned for the GET calls.
+// Maybe a map with an object representing each row of a table and the gameIDs as keys?
 // TODO: Implement GetGames. Decide if it should be table-specific or split
 // into different functions for different tables (as it would be returning
 // different length sets of arrays based on the table.)
