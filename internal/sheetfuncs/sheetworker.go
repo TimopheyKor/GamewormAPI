@@ -136,7 +136,13 @@ func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
 // If building Structs or JSON files to be cashed on the browser, there should
 // be a different function for each table as pulling its data may have
 // a different return type.
-func (w *SheetsHolder) GetGames(table string) {}
+func (w *SheetsHolder) GetGames() {}
+
+func (w *SheetsHolder) GetReviews() {}
+
+func (w *SheetsHolder) GetBacklog() {}
+
+func (w *SheetsHolder) GetGame() {}
 
 // getTableSheetId gets the SheetId of a specific table given the table's
 // sheet name.
