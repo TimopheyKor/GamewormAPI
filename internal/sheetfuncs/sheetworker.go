@@ -133,6 +133,9 @@ func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
 // TODO: Implement GetGames. Decide if it should be table-specific or split
 // into different functions for different tables (as it would be returning
 // different length sets of arrays based on the table.)
+// If building Structs or JSON files to be cashed on the browser, there should
+// be a different function for each table as pulling its data may have
+// a different return type.
 func (w *SheetsHolder) GetGames(table string) {}
 
 // getTableSheetId gets the SheetId of a specific table given the table's
