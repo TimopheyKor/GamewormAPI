@@ -136,13 +136,19 @@ func (w *SheetsHolder) deleteRow(rowIdx int64, table string) (string, error) {
 // If building Structs or JSON files to be cashed on the browser, there should
 // be a different function for each table as pulling its data may have
 // a different return type.
+// GetGames returns a list of all game objects from the Games table in an
+// api-readable formate.
 func (w *SheetsHolder) GetGames() {}
 
+// GetReviews returns a list of all reviews as objects tied to a gameID in an
+// api-readable format.
 func (w *SheetsHolder) GetReviews() {}
 
+// GetBacklog returns a list of all backlog rows as objects tied to a gameID in
+// an api-readable format.
 func (w *SheetsHolder) GetBacklog() {}
 
-// GetGame
+// GetGame returns a single game in API-readable format.
 // TODO: Decide if this should be by-name or by-id.
 // At some point we'll need search functionality - but that might belong on
 // the frontend.
