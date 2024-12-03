@@ -142,6 +142,10 @@ func (w *SheetsHolder) GetReviews() {}
 
 func (w *SheetsHolder) GetBacklog() {}
 
+// GetGame
+// TODO: Decide if this should be by-name or by-id.
+// At some point we'll need search functionality - but that might belong on
+// the frontend.
 func (w *SheetsHolder) GetGame() {}
 
 // getTableSheetId gets the SheetId of a specific table given the table's
