@@ -154,6 +154,16 @@ func (w *SheetsHolder) GetBacklog() {}
 // the frontend.
 func (w *SheetsHolder) GetGame() {}
 
+// Update functions:
+func (w *SheetsHolder) UpdateGame(gameId string)                     {}
+func (w *SheetsHolder) AddReview(gameId string, options []string)    {}
+func (w *SheetsHolder) UpdateReview(gameId string, options []string) {}
+
+// TODO: Backlog additions and updates will need additional logic in order to
+// keep the priority rankings of games in the backlog proper.
+func (w *SheetsHolder) AddToBacklog(gameId string, options []string)  {}
+func (w *SheetsHolder) UpdateBacklog(gameId string, options []string) {}
+
 // getTableSheetId gets the SheetId of a specific table given the table's
 // sheet name.
 func (w *SheetsHolder) getTableSheetId(table string) (int64, error) {
