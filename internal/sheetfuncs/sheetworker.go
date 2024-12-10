@@ -152,7 +152,9 @@ func (w *SheetsHolder) GetBacklog() {}
 // TODO: Decide if this should be by-name or by-id.
 // At some point we'll need search functionality - but that might belong on
 // the frontend.
-func (w *SheetsHolder) GetGame() {}
+func (w *SheetsHolder) GetGame(gameID string) schema.GameObject {
+	return schema.GameObject{}
+}
 
 // Update functions:
 func (w *SheetsHolder) UpdateGame(gameId string)                     {}
