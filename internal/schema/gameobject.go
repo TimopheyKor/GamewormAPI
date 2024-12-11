@@ -1,5 +1,7 @@
 package schema
 
+import "github.com/TimopheyKor/GamewormAPI/internal/static"
+
 // GameObject holds the columns that a row for one game in the GamewormDB
 // will have. It should be used to interface between receiving API calls to
 // GamewormAPI with game data and pushing or editing game data in Google Sheets.
@@ -22,6 +24,19 @@ func NewGameObject(title, dev string, opts ...GameOption) *GameObject {
 	}
 	for _, opt := range opts {
 		opt(newGameObj)
+	}
+	return newGameObj
+}
+
+// NewGameObjectFromDB takes a row from the Games table in the GamewormDB sheet
+// and converts it to a new GameObject.
+func NewGameObjectFromDB(row [5]string) *GameObject {
+	newGameObj := &GameObject{
+		id:        row[static.GamePK],
+		title:     row[static.GTitle],
+		Image:     row[static.GImage],
+		developer: row[static.GDev],
+		Publisher: row[static.GPub],
 	}
 	return newGameObj
 }
