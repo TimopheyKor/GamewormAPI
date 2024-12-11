@@ -152,8 +152,29 @@ func (w *SheetsHolder) GetBacklog() {}
 // TODO: Decide if this should be by-name or by-id.
 // At some point we'll need search functionality - but that might belong on
 // the frontend.
-func (w *SheetsHolder) GetGame(gameID string) schema.GameObject {
-	return schema.GameObject{}
+func (w *SheetsHolder) GetGame(gameID string) (*schema.GameObject, error) {
+	_, err := w.GameIdExists(gameID, static.GameD)
+	if err != nil {
+		return nil, err
+	}
+	range_ := static.GameD + "!" + static.GameRange
+	res, err := w.Srv.Spreadsheets.Values.Get(w.SheetId, range_).Do()
+	if err != nil {
+		return nil, err
+	}
+	if len(res.Values) == 0 {
+		return nil, nil
+	}
+	for _, row := range res.Values {
+		if row[static.GamePK] == gameID {
+			var gameData [5]string
+			for idx, _ := range gameData {
+				gameData[idx] = string(row[idx].(string))
+			}
+			return schema.NewGameObjectFromDB(gameData), nil
+		}
+	}
+	return nil, static.ErrNoDataFound
 }
 
 // Update functions:
